@@ -63,9 +63,42 @@
             font-size: 0.9em;
             margin-top: 5px;
         }
+        /* Estilo do pop-up */
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            display: none;
+            text-align: center;
+        }
+        .popup img {
+            width: 100%;
+            height: auto;
+        }
+        .popup button {
+            display: block;
+            margin: 20px auto 0;
+            padding: 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
+    <div class="popup" id="popup">
+        <img id="popupImage" src="/mnt/data/IMG_3939.PNG" alt="Popup Image">
+        <button onclick="closePopup()">Fechar</button>
+    </div>
+    
     <div class="container">
         <h2>Calculadora de Gasto Energético</h2>
         <form id="calorieForm">
@@ -111,6 +144,22 @@
     </div>
 
     <script>
+        window.onload = function() {
+            showPopup();
+        };
+
+        function showPopup() {
+            var popup = document.getElementById('popup');
+            var popupImage = document.getElementById('popupImage');
+            popupImage.src = '/mnt/data/IMG_3939.PNG';  // Caminho da sua imagem
+            popup.style.display = 'block';
+        }
+
+        function closePopup() {
+            var popup = document.getElementById('popup');
+            popup.style.display = 'none';
+        }
+
         document.getElementById('calorieForm').addEventListener('submit', function(event) {
             event.preventDefault();
             let isValid = true;
