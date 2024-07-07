@@ -30,6 +30,13 @@
             width: 100%;
             padding: 8px;
             box-sizing: border-box;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            transition: border-color 0.3s;
+        }
+        input:focus, select:focus {
+            border-color: #007BFF;
+            outline: none;
         }
         button {
             width: 100%;
@@ -39,6 +46,7 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            transition: background-color 0.3s;
         }
         button:hover {
             background-color: #0056b3;
@@ -50,6 +58,11 @@
             border: 1px solid #ced4da;
             border-radius: 5px;
         }
+        .error {
+            color: red;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
     </style>
 </head>
 <body>
@@ -59,31 +72,38 @@
             <div class="form-group">
                 <label for="sexo">Sexo:</label>
                 <select id="sexo" name="sexo" required>
+                    <option value="">Selecione</option>
                     <option value="masculino">Masculino</option>
                     <option value="feminino">Feminino</option>
                 </select>
+                <div id="sexoError" class="error"></div>
             </div>
             <div class="form-group">
                 <label for="peso">Peso (kg):</label>
-                <input type="number" id="peso" name="peso" required>
+                <input type="number" id="peso" name="peso" min="1" step="0.1" required>
+                <div id="pesoError" class="error"></div>
             </div>
             <div class="form-group">
                 <label for="altura">Altura (cm):</label>
-                <input type="number" id="altura" name="altura" required>
+                <input type="number" id="altura" name="altura" min="1" step="0.1" required>
+                <div id="alturaError" class="error"></div>
             </div>
             <div class="form-group">
                 <label for="idade">Idade:</label>
-                <input type="number" id="idade" name="idade" required>
+                <input type="number" id="idade" name="idade" min="1" required>
+                <div id="idadeError" class="error"></div>
             </div>
             <div class="form-group">
                 <label for="atividade">Fator de Atividade Física:</label>
                 <select id="atividade" name="atividade" required>
+                    <option value="">Selecione</option>
                     <option value="1.2">Sedentário (pouco ou nenhum exercício)</option>
                     <option value="1.375">Levemente ativo (exercício leve ou esportes 1-3 dias/semana)</option>
                     <option value="1.55">Moderadamente ativo (exercício moderado ou esportes 3-5 dias/semana)</option>
                     <option value="1.725">Altamente ativo (exercício intenso ou esportes 6-7 dias/semana)</option>
                     <option value="1.9">Extremamente ativo (exercício muito intenso ou trabalho físico)</option>
                 </select>
+                <div id="atividadeError" class="error"></div>
             </div>
             <button type="submit">Calcular</button>
         </form>
@@ -93,6 +113,14 @@
     <script>
         document.getElementById('calorieForm').addEventListener('submit', function(event) {
             event.preventDefault();
+            let isValid = true;
+
+            // Reseta mensagens de erro
+            document.getElementById('sexoError').innerText = '';
+            document.getElementById('pesoError').innerText = '';
+            document.getElementById('alturaError').innerText = '';
+            document.getElementById('idadeError').innerText = '';
+            document.getElementById('atividadeError').innerText = '';
 
             const sexo = document.getElementById('sexo').value;
             const peso = parseFloat(document.getElementById('peso').value);
@@ -100,25 +128,50 @@
             const idade = parseInt(document.getElementById('idade').value);
             const atividade = parseFloat(document.getElementById('atividade').value);
 
-            // Calcula a TMB
-            let TMB;
-            if (sexo === 'masculino') {
-                TMB = 10 * peso + 6.25 * altura - 5 * idade + 5;
-            } else {
-                TMB = 10 * peso + 6.25 * altura - 5 * idade - 161;
+            // Validações
+            if (!sexo) {
+                document.getElementById('sexoError').innerText = 'Por favor, selecione seu sexo.';
+                isValid = false;
+            }
+            if (!peso || peso <= 0) {
+                document.getElementById('pesoError').innerText = 'Por favor, insira um peso válido.';
+                isValid = false;
+            }
+            if (!altura || altura <= 0) {
+                document.getElementById('alturaError').innerText = 'Por favor, insira uma altura válida.';
+                isValid = false;
+            }
+            if (!idade || idade <= 0) {
+                document.getElementById('idadeError').innerText = 'Por favor, insira uma idade válida.';
+                isValid = false;
+            }
+            if (!atividade) {
+                document.getElementById('atividadeError').innerText = 'Por favor, selecione um fator de atividade física.';
+                isValid = false;
             }
 
-            // Calcula o GET
-            const GET = TMB * atividade;
+            if (isValid) {
+                // Calcula a TMB
+                let TMB;
+                if (sexo === 'masculino') {
+                    TMB = 10 * peso + 6.25 * altura - 5 * idade + 5;
+                } else {
+                    TMB = 10 * peso + 6.25 * altura - 5 * idade - 161;
+                }
 
-            // Aplica o déficit calórico
-            const caloriasIdeais = GET - 700;
+                // Calcula o GET
+                const GET = TMB * atividade;
 
-            // Exibe os resultados
-            document.getElementById('result').innerHTML = `
-                <p>Gasto Energético Total: ${GET.toFixed(2)} kcal</p>
-                <p>Calorias Ideais para Queima de Gordura: ${caloriasIdeais.toFixed(2)} kcal</p>
-            `;
+                // Aplica o déficit calórico
+                const caloriasIdeais = GET - 700;
+
+                // Exibe os resultados
+                document.getElementById('result').innerHTML = `
+                    <p>Taxa Metabólica Basal (TMB): ${TMB.toFixed(2)} kcal</p>
+                    <p>Gasto Energético Total (GET): ${GET.toFixed(2)} kcal</p>
+                    <p>Calorias Ideais para Queima de Gordura: ${caloriasIdeais.toFixed(2)} kcal</p>
+                `;
+            }
         });
     </script>
 </body>
