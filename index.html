@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora de Gasto Energético</title>
+    <title>Calculadora de Gasto Energético por Ton Manhães</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -63,7 +63,9 @@
             font-size: 0.9em;
             margin-top: 5px;
         }
-        /* Estilo do pop-up */
+        .bold {
+            font-weight: bold;
+        }
         .popup {
             position: fixed;
             top: 50%;
@@ -100,7 +102,7 @@
     </div>
     
     <div class="container">
-        <h2>Calculadora de Gasto Energético</h2>
+        <h2>Calculadora de Gasto Energético por Ton Manhães</h2>
         <form id="calorieForm">
             <div class="form-group">
                 <label for="sexo">Sexo:</label>
@@ -216,9 +218,10 @@
 
                 // Exibe os resultados
                 document.getElementById('result').innerHTML = `
-                    <p>Taxa Metabólica Basal (TMB): ${TMB.toFixed(2)} kcal</p>
-                    <p>Gasto Energético Total (GET): ${GET.toFixed(2)} kcal</p>
-                    <p>Calorias Ideais para Queima de Gordura: ${caloriasIdeais.toFixed(2)} kcal</p>
+                    <p>Taxa Metabólica Basal (TMB): ${Math.round(TMB)} kcal</p>
+                    <p>Gasto Energético Total (GET): ${Math.round(GET)} kcal</p>
+                    <p class="bold">Calorias Ideais para Queima de Gordura: ${Math.round(caloriasIdeais)} kcal</p>
+                    <p>Siga @nutritonmanhaes</p>
                 `;
             }
         });
