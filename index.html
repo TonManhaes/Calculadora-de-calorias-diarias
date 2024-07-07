@@ -43,6 +43,13 @@
         button:hover {
             background-color: #0056b3;
         }
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #e9ecef;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
@@ -80,6 +87,39 @@
             </div>
             <button type="submit">Calcular</button>
         </form>
+        <div class="result" id="result"></div>
     </div>
+
+    <script>
+        document.getElementById('calorieForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const sexo = document.getElementById('sexo').value;
+            const peso = parseFloat(document.getElementById('peso').value);
+            const altura = parseFloat(document.getElementById('altura').value);
+            const idade = parseInt(document.getElementById('idade').value);
+            const atividade = parseFloat(document.getElementById('atividade').value);
+
+            // Calcula a TMB
+            let TMB;
+            if (sexo === 'masculino') {
+                TMB = 10 * peso + 6.25 * altura - 5 * idade + 5;
+            } else {
+                TMB = 10 * peso + 6.25 * altura - 5 * idade - 161;
+            }
+
+            // Calcula o GET
+            const GET = TMB * atividade;
+
+            // Aplica o déficit calórico
+            const caloriasIdeais = GET - 700;
+
+            // Exibe os resultados
+            document.getElementById('result').innerHTML = `
+                <p>Gasto Energético Total: ${GET.toFixed(2)} kcal</p>
+                <p>Calorias Ideais para Queima de Gordura: ${caloriasIdeais.toFixed(2)} kcal</p>
+            `;
+        });
+    </script>
 </body>
 </html>
