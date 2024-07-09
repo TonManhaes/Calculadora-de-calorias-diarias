@@ -216,11 +216,19 @@
                 // Aplica o déficit calórico
                 const caloriasIdeais = GET - 700;
 
+                // Calcula macros
+                const carboidratos = peso * 3; // 3g por kg de peso
+                const proteinas = peso * 2; // 2g por kg de peso
+                const gorduras = peso * 0.9; // 0.9g por kg de peso
+
                 // Exibe os resultados
                 document.getElementById('result').innerHTML = `
                     <p>Taxa Metabólica Basal (TMB): ${Math.round(TMB)} kcal</p>
                     <p>Gasto Energético Total (GET): ${Math.round(GET)} kcal</p>
                     <p class="bold">Calorias Ideais para Queima de Gordura: ${Math.round(caloriasIdeais)} kcal</p>
+                    <p>Carboidratos: ${Math.round(carboidratos)} g</p>
+                    <p>Proteínas: ${Math.round(proteinas)} g</p>
+                    <p>Gorduras: ${Math.round(gorduras)} g</p>
                     <p>Siga @nutritonmanhaes</p>
                 `;
             }
